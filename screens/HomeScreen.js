@@ -7,12 +7,21 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Button
 } from 'react-native';
 import { WebBrowser } from 'expo';
+
+import authService from '../services/authService';
 
 import { MonoText } from '../components/StyledText';
 
 export default class HomeScreen extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this._signOutAsync = this._signOutAsync.bind(this);
+  }
+
   static navigationOptions = {
     header: null,
   };
@@ -44,6 +53,8 @@ export default class HomeScreen extends React.Component {
             <Text style={styles.getStartedText}>
               Myles is the Shit Yo!
             </Text>
+
+            <Button title="sign out" onPress={this._signOutAsync} />
           </View>
 
           <View style={styles.helpContainer}>
@@ -62,6 +73,12 @@ export default class HomeScreen extends React.Component {
         </View>
       </View>
     );
+  }
+
+  _signOutAsync() {
+    authService.signOut();
+
+    this.props.navigation.navigate('Auth');
   }
 
   _maybeRenderDevelopmentModeWarning() {
