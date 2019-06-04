@@ -1,5 +1,7 @@
 import React from 'react';
 
+import authService from '../services/authService';
+
 import {
   AsyncStorage,
   View,
@@ -21,8 +23,9 @@ class SignInScreen extends React.Component {
   }
 
   _signInAsync = async () => {
-    await AsyncStorage.setItem('userToken', 'abc');
-    this.props.navigation.navigate('App');
+    const result = await authService.googleSignIn();
+    console.log(result);
+    // this.props.navigation.navigate('App');
   };
 }
 
