@@ -22,13 +22,14 @@ const authService = {
 
     return false;
   },
-  signOut: async () => {
+  async signOut() {
     await AsyncStorage.removeItem('userToken');
   },
-  googleSignIn: async () => {
+  async googleSignIn() {
     try {
-      return await Google.logInAsync({
-        clientId: '298863796991-tu9r4ov0kpklji5b02agtoc07mds26dl.apps.googleusercontent.com'
+      const result = await Google.logInAsync({
+        behavior: 'web',
+        androidClientId: '667748137982-iojmftn7mdojoldr9ifog2hb0i4mmrk8.apps.googleusercontent.com'
       });
 
       // TODO: need to instead of return store in variable and handle response
@@ -36,11 +37,17 @@ const authService = {
       // because of future use of FaceBook sign in.
       // https://github.com/nathvarun/Expo-Google-Login-Firebase/blob/master/screens/LoginScreen.js
       // good reference for this process
+
+      if (result.type === 'success') {
+        this.onSignin(result);
+
+        return result;
+      }
     } catch (e) {
       console.log('error: ', e);
     }
   },
-  onSignin: async (signedInUser) => {
+  async onSignin(signedInUser) {
     const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
       unsubscribe();
 

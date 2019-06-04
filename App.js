@@ -1,14 +1,31 @@
 import React from 'react';
+
+import firebase from 'firebase';
+
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 'expo';
 import AppNavigator from './navigation/AppNavigator';
 
 export default class App extends React.Component {
-  state = {
-    isLoadingComplete: false,
-    errorMessage: null,
-    location: null
-  };
+  constructor(props) {
+    super(props);
+
+    firebase.initializeApp({
+      apiKey: "AIzaSyAsPmsXiZJcWSVIQjgnO0diwPpsMVNpcDM",
+      authDomain: "hangout-a8056.firebaseapp.com",
+      databaseURL: "https://hangout-a8056.firebaseio.com",
+      projectId: "hangout-a8056",
+      storageBucket: "hangout-a8056.appspot.com",
+      messagingSenderId: "667748137982",
+      appId: "1:667748137982:web:1105c062692d5d19"
+    });
+
+    this.state = {
+      isLoadingComplete: false,
+      errorMessage: null,
+      location: null
+    };
+  }
 
   componentWillMount() {
     if (Platform.OS === 'android' && !Constants.isDevice) {
