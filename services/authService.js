@@ -39,6 +39,7 @@ const authService = {
       // good reference for this process
 
       if (result.type === 'success') {
+        console.log(result);
         this.onSignin(result);
 
         return result;
