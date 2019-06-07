@@ -1,6 +1,7 @@
 import React from 'react';
 
 import firebase from 'firebase';
+import 'firebase/firestore';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 'expo';

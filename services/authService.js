@@ -1,9 +1,10 @@
 import firebase from 'firebase';
+//import 'firebase/firestore';
 
 import { AsyncStorage } from 'react-native';
 import { Google } from 'expo';
 
-
+window = undefined;
 const authService = {
   isUserEqual: (signedInUser, firebaseUser) => {
     if (firebaseUser) {
@@ -63,13 +64,17 @@ const authService = {
           .signInAndRetrieveDataWithCredential(credential)
           .then((result) => {
             console.log('User signed in');
+
             if (result.additionalUserInfo.isNewUser) {
               // First time user set their data in firebase
+              console.log(result);
               firebase
-                .database()
-                .ref(`/users/${result.user.uid}`)
+                .firestore()
+                .collection('users')
+                .doc(result.user.uid)
                 .set({
-
+                  firstName: signedInUser.user.givenName,
+                  lastName: signedInUser.user.familyName
                 })
                 .then((snapshot) => {
                   console.log('New User Snapshot', snapshot);
@@ -77,7 +82,7 @@ const authService = {
             } else {
               firebase
                 .database()
-                .ref(`/users/${result.user.uid}`)
+                .ref(`/users/${result.user.id}`)
                 .update({
                   lastLoggedIn: Date.now() // This needs to be added to the users table
                 });
