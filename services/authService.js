@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import { AsyncStorage } from 'react-native';
 import { Google } from 'expo';
 
-window = undefined;
+window = undefined; // temp workaround for https://github.com/firebase/firebase-js-sdk/issues/1824
 const authService = {
   isUserEqual: (signedInUser, firebaseUser) => {
     if (firebaseUser) {
