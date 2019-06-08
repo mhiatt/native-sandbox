@@ -1,4 +1,7 @@
 import React from 'react';
+
+import firebase from 'firebase';
+
 import {
   ActivityIndicator,
   AsyncStorage,
@@ -17,10 +20,14 @@ class AuthLoadingScreen extends React.Component {
   _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
 
+    // const currentUser = authService.getCurrentUser();
+    // console.log('AuthLoadingScreen line: 23', currentUser);
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
-  };
+    firebase.auth().onAuthStateChanged(user => {
+      this.props.navigation.navigate(user ? 'App' : 'Auth');
+    });
+  }
 
   // Render any loading content that you like here
   render() {

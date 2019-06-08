@@ -49,6 +49,9 @@ const authService = {
       console.log('error: ', e);
     }
   },
+  getCurrentUser() {
+    return firebase.auth().currentUser;
+  },
   async onSignin(signedInUser) {
     const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
       unsubscribe();
@@ -71,13 +74,15 @@ const authService = {
               firebase
                 .firestore()
                 .collection('users')
-                .doc(result.user.uid)
+                .doc(result.user.uid) // Might need to use a different id --> when deleting out of firebase auth then signing in again it creates a duplicate user --> maybe use google user id (signedInUser.user.id)
                 .set({
                   firstName: signedInUser.user.givenName,
-                  lastName: signedInUser.user.familyName
+                  lastName: signedInUser.user.familyName,
+                  lastLoggedIn: Date.now()
                 })
                 .then((snapshot) => {
                   console.log('New User Snapshot', snapshot);
+                  return snapshot;
                 })
             } else {
               firebase
@@ -85,6 +90,9 @@ const authService = {
                 .ref(`/users/${result.user.id}`)
                 .update({
                   lastLoggedIn: Date.now() // This needs to be added to the users table
+                })
+                .then((snapshot) => {
+                  console.log('Not a new users updated lastLoggedIn', snapshot);
                 });
             }
           })
@@ -93,6 +101,16 @@ const authService = {
           });
       } else {
         console.log('User is already signed-in to Firebase.');
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(result.user.uid)
+          .get()
+          .then((document) => {
+            if (document.exists) {
+              return document;
+            }
+          });
       }
     }); // might have to bind inner function to this .bind(this)
   }
