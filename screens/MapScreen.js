@@ -4,9 +4,17 @@ import { MapView } from 'expo';
 
 const { Marker } = MapView;
 
+import eventService from '../services/eventService';
+
 import publicEvents from '../mockData/publicEvents.json';
 
 class MapScreen extends Component {
+  constructor(props) {
+    super(props);
+
+    eventService.getPublicEvents(0, 0, 1);
+  }
+
   render() {
     console.log(Marker);
     return (
