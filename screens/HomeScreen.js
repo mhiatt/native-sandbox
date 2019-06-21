@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+
 import {
   Image,
   Platform,
@@ -15,16 +17,20 @@ import authService from '../services/authService';
 
 import { MonoText } from '../components/StyledText';
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null,
+  };
+
   constructor(props) {
     super(props);
 
     this._signOutAsync = this._signOutAsync.bind(this);
   }
 
-  static navigationOptions = {
-    header: null,
-  };
+  componentDidMount() {
+
+  }
 
   render() {
     return (
@@ -52,6 +58,7 @@ export default class HomeScreen extends React.Component {
 
             <Text style={styles.getStartedText}>
               Myles is the Shit Yo!
+              { this.props.user.lastName }
             </Text>
 
             <Button title="sign out" onPress={this._signOutAsync} />
@@ -203,3 +210,14 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
   },
 });
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    user: state.user,
+    ...ownProps
+  };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

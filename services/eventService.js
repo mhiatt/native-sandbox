@@ -21,8 +21,9 @@ const eventService =  {
       .where('location', '>', lesserGeopoint)
       .where('location', '<', greaterGeopoint)
       .onSnapshot(querySnapshot => {
+        console.log('eventService.js: ', querySnapshot.length);
         querySnapshot.forEach(eventSnapshot => {
-          console.log('eventService.js: ', eventSnapshot);
+          console.log('eventService.js: ', eventSnapshot.data());
         });
       });
   }
