@@ -1,5 +1,8 @@
 {
   "user": {
     "lastName": "charles"
+  },
+  "event": {
+    "publicEvents": []
   }
 }

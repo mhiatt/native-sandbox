@@ -40,7 +40,7 @@ const authService = {
       // good reference for this process
 
       if (result.type === 'success') {
-        console.log(result);
+        // console.log(result);
         this.onSignin(result);
 
         return result;
@@ -66,11 +66,11 @@ const authService = {
           .auth()
           .signInAndRetrieveDataWithCredential(credential)
           .then((result) => {
-            console.log('User signed in');
+            // console.log('User signed in');
 
             if (result.additionalUserInfo.isNewUser) {
               // First time user set their data in firebase
-              console.log(result);
+              // console.log(result);
               firebase
                 .firestore()
                 .collection('users')
@@ -81,7 +81,7 @@ const authService = {
                   lastLoggedIn: Date.now()
                 })
                 .then((snapshot) => {
-                  console.log('New User Snapshot', snapshot);
+                  // console.log('New User Snapshot', snapshot);
                   return snapshot;
                 })
             } else {
@@ -92,15 +92,15 @@ const authService = {
                   lastLoggedIn: Date.now() // This needs to be added to the users table
                 })
                 .then((snapshot) => {
-                  console.log('Not a new users updated lastLoggedIn', snapshot);
+                  // console.log('Not a new users updated lastLoggedIn', snapshot);
                 });
             }
           })
           .catch((error) => {
-            console.log('Error with signInAndRetrieveDataWithCredential', error);
+            // console.log('Error with signInAndRetrieveDataWithCredential', error);
           });
       } else {
-        console.log('User is already signed-in to Firebase.');
+        // console.log('User is already signed-in to Firebase.');
         firebase
           .firestore()
           .collection('users')
