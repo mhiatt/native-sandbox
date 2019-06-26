@@ -3,6 +3,15 @@
     "lastName": "charles"
   },
   "event": {
-    "publicEvents": []
+    "publicEvents": [
+      {
+        "name": "Private Event 1",
+        "description": "This is a private event. You need to request permission to join.",
+        "location": {
+          "_lat": 0.022,
+          "_long": 0
+        }
+      }
+    ]
   }
 }
