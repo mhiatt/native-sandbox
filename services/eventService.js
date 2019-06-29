@@ -31,6 +31,12 @@ const eventService = {
     });
 
     return events;
+  },
+  createEvent(eventData) {
+    firebase
+      .firestore()
+      .collection('events')
+      .add();
   }
 };
 
