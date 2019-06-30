@@ -10,10 +10,17 @@ import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 
 import store from './store';
 // import mainReducer from './reducers/mainReducer';
 // import initState from './initState.json';
-
+import { setUserLocation } from './reducers/userReducer';
 import AppNavigator from './navigation/AppNavigator';
 
-export default class App extends React.Component {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+});
+
+class App extends React.Component {
   constructor(props) {
     super(props);
 
@@ -66,6 +73,7 @@ export default class App extends React.Component {
   }
 
   _getLocationAsync = async () => {
+    console.log('GETTING location');
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
       this.setState({
@@ -74,6 +82,7 @@ export default class App extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
+    store.dispatch(setUserLocation(location));
     this.setState({ location });
     console.log(location);
   };
@@ -92,22 +101,17 @@ export default class App extends React.Component {
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
-  };
+  }
 
   _handleLoadingError = error => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
     console.warn(error);
-  };
+  }
 
   _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
-  };
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-});
+export default App;

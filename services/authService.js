@@ -32,7 +32,6 @@ const authService = {
         behavior: 'web',
         androidClientId: '667748137982-iojmftn7mdojoldr9ifog2hb0i4mmrk8.apps.googleusercontent.com'
       });
-
       // TODO: need to instead of return store in variable and handle response
       // Then call onSignIn with the new google user, calling param signedInUser
       // because of future use of FaceBook sign in.

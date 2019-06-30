@@ -26,8 +26,10 @@ const eventService = {
 
 
     querySnapshot.forEach(eventSnapshot => {
-      console.log('eventService.js: ', eventSnapshot.data());
-      events.push(eventSnapshot.data());
+      let event = eventSnapshot.data();
+      event.id = eventSnapshot.id;
+
+      events.push(event);
     });
 
     return events;

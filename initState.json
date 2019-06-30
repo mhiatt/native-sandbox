@@ -1,6 +1,7 @@
 {
   "user": {
-    "lastName": "charles"
+    "lastName": "charles",
+    "location": {}
   },
   "event": {
     "publicEvents": [

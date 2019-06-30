@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 
-import { MapView } from 'expo';
+import { MapView, Permissions, Location } from 'expo';
 
 const { Marker } = MapView;
 
@@ -12,40 +12,50 @@ import eventService from '../services/eventService';
 import publicEvents from '../mockData/publicEvents.json';
 
 import { getEventsSuccess } from '../reducers/eventReducer';
+import { setUserLocation } from '../reducers/userReducer';
 
 class MapScreen extends Component {
   constructor(props) {
     super(props);
   }
 
+  getUserLocation = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
+    this.props.setUserLocation(location);
+  }
+
+  componentWillMount() {
+    this.getUserLocation();
+  }
+
   componentDidMount() {
     eventService
       .getPublicEvents(0, 0, 1)
       .then(events => {
-        console.log(events);
         this.props.getEventsSuccess(events);
       });
   }
 
   render() {
-    console.log('publievents: ', this.props);
     return (
       <MapView
         style={{ flex: 1 }}
         initialRegion={{
-          latitude: 0,
-          longitude: 0,
+          latitude: this.props.userLocation.coords && this.props.userLocation.coords.latitude, // TODO: have lodaing stat that does not mount this code until the users location is found
+          longitude: this.props.userLocation.coords && this.props.userLocation.coords.longitude, //
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
           showsUserLocation: true
         }}
       >
         {
-          this.props.publicEvents.map((event) => {
-            console.log('events lat:', event.location);
+          this.props.publicEvents.map((event, index) => {
             return (
               <Marker
-                key={event.id}
+                key={index}
                 coordinate={{
                   latitude: event.location._lat,
                   longitude: event.location._long
@@ -56,22 +66,22 @@ class MapScreen extends Component {
             );
           })
         }
-
       </MapView>
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(state);
   return {
     publicEvents: state.event.publicEvents,
+    userLocation: state.user.location,
     ...ownProps
   };
 };
 
 const mapDispatchToProps = {
-  getEventsSuccess
+  getEventsSuccess,
+  setUserLocation
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

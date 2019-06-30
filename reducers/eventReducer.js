@@ -16,7 +16,7 @@ const eventReducer = (state, action) => {
   }
 };
 
-export function getEventsSuccess (events) {
+export function getEventsSuccess(events) {
   return {
     type: actionTypes.GET_EVENTS_SUCCESS,
     payload: events

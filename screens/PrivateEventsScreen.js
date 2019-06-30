@@ -36,7 +36,6 @@ class PrivateEventsScreen extends Component {
   }
 }
 
-
 const mapStateToProps = (state, ownProps) => {
   return {
     privateEvents: state.event.privateEvents,
