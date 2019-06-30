@@ -38,7 +38,14 @@ const eventService = {
     firebase
       .firestore()
       .collection('events')
-      .add();
+      .add({
+        name: eventData.name,
+        description: eventData.description,
+        location: new firebase.firestore.GeoPoint(
+          eventData.location.latitude,
+          eventData.location.longitude
+        )
+      });
   }
 };
 
