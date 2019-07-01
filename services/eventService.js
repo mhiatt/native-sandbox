@@ -34,18 +34,24 @@ const eventService = {
 
     return events;
   },
-  createEvent(eventData) {
-    firebase
+  async createEvent(eventData) {
+    const event = {
+      name: eventData.name,
+      description: eventData.description,
+      location: new firebase.firestore.GeoPoint(
+        eventData.location.latitude,
+        eventData.location.longitude
+      )
+    };
+
+    const docRef = await firebase
       .firestore()
       .collection('events')
-      .add({
-        name: eventData.name,
-        description: eventData.description,
-        location: new firebase.firestore.GeoPoint(
-          eventData.location.latitude,
-          eventData.location.longitude
-        )
-      });
+      .add(event);
+
+    event.id = dockRef.id;
+
+    return dockRef
   }
 };
 

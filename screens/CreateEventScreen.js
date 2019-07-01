@@ -3,8 +3,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { View, TextInput, Switch, StyleSheet, Button, Text } from 'react-native';
+import { Form, Field } from 'react-final-form';
+
+import FinalFormTextInput from '../components/FinalFormTextInput';
+import FinalFormSwitch from '../components/FinalFormSwitch';
 
 import eventService from '../services/eventService';
+import insertPublicEvent from '../reducers/eventReducer';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -14,10 +20,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     margin: 15
   },
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#000000',
-    margin: 15
+  serverErrorText: {
+    fontSize: 14,
+    color: 'crimson'
   },
   textArea: {
     borderWidth: 1,
@@ -26,6 +31,21 @@ const styles = StyleSheet.create({
   }
 });
 
+const validation = values => {
+  const errors = {};
+
+  if (!values.eventName) {
+    errors.eventName = 'Required';
+  }
+
+  if (!values.eventDescription) {
+    errors.eventDescription = 'Required';
+  }
+
+  return errors;
+};
+
+
 class CreateEventScreen extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +53,8 @@ class CreateEventScreen extends Component {
     this.state = {
       eventName: null,
       eventDescription: null,
-      private: false
+      private: false,
+      serverError: false
     };
   }
 
@@ -45,46 +66,63 @@ class CreateEventScreen extends Component {
         latitude: this.props.userLocation.coords.latitude,
         longitude: this.props.userLocation.coords.longitude
       }
+    })
+    .then(response => {
+      this.props.insertPublicEvent(response);
+
+      this.setState({
+        serverError: false
+      });
+    })
+    .catch(() => {
+      this.setState({
+        serverError: true
+      });
     });
   }
 
   render() {
     return (
-      <View
-        style={styles.container}
-      >
-        <Text style={styles.title}>Creat Event</Text>
-        <TextInput
-          onChangeText={text => this.setState({
-            eventName: text
-          })}
-          value={this.state.eventName}
-          style={styles.textInput}
-          placeholder="Event Name"
+        <Form
+          onSubmit={this.createEvent}
+          validate={validation}
+          render={({ handleSubmit, pristine, invalid }) => (
+            <View
+            style={styles.container}
+            >
+              <Text style={styles.title}>Creat Event</Text>
+              {
+                this.state.serverError && (
+                  <View>
+                    <Text style={styles.serverErrorText}>
+                      Ah snap! Something went wrong when creating your event. Please try again later.
+                    </Text>
+                  </View>
+                )
+              }
+              <FinalFormTextInput
+                name="eventName"
+                labelText="Event Name"
+              />
+              <FinalFormTextInput
+                name="eventDescription"
+                labelText="Event Description"
+                multiline
+                numberOfLines={10}
+              />
+              <FinalFormSwitch
+                name="eventPrivate"
+                labelText="Private Event"
+              />
+              <View>
+                <Button
+                  title="Add Event"
+                  onPress={() => this.createEvent()}
+                />
+              </View>
+            </View>
+          )}
         />
-        <TextInput
-          onChangeText={text => this.setState({
-            eventDescription: text
-          })}
-          value={this.state.eventDescription}
-          multiline
-          numberOfLines={10}
-          style={styles.textArea}
-        />
-        <Switch
-          value={this.state.private}
-          onValueChange={() => this.setState({
-            private: !
-            this.state.private
-          })}
-        />
-        <View>
-          <Button
-            title="Add Event"
-            onPress={() => this.createEvent()}
-          />
-        </View>
-      </View>
     );
   }
 }
@@ -97,7 +135,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-
+  insertPublicEvent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEventScreen);
