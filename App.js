@@ -7,11 +7,11 @@ import 'firebase/firestore';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 'expo';
 
-import store from './store';
+import store from './src/store';
 // import mainReducer from './reducers/mainReducer';
 // import initState from './initState.json';
-import { setUserLocation } from './reducers/userReducer';
-import AppNavigator from './navigation/AppNavigator';
+import { setUserLocation } from './src/reducers/userReducer';
+import AppNavigator from './src/navigation/AppNavigator';
 
 const styles = StyleSheet.create({
   container: {
@@ -90,15 +90,15 @@ class App extends React.Component {
   _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
-        require('./assets/images/robot-dev.png'),
-        require('./assets/images/robot-prod.png'),
+        require('./src/assets/images/robot-dev.png'),
+        require('./src/assets/images/robot-prod.png'),
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
         ...Icon.Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
-        'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf'),
       }),
     ]);
   }

@@ -9,8 +9,6 @@ const { Marker } = MapView;
 
 import eventService from '../services/eventService';
 
-import publicEvents from '../mockData/publicEvents.json';
-
 import { getEventsSuccess } from '../reducers/eventReducer';
 import { setUserLocation } from '../reducers/userReducer';
 
