@@ -11,7 +11,6 @@ import FinalFormSwitch from '../components/FinalFormSwitch';
 import eventService from '../services/eventService';
 import insertPublicEvent from '../reducers/eventReducer';
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1
@@ -51,21 +50,19 @@ class CreateEventScreen extends Component {
     super(props);
 
     this.state = {
-      eventName: null,
-      eventDescription: null,
-      private: false,
       serverError: false
     };
   }
 
-  createEvent = () => {
+  createEvent = values => {
     eventService.createEvent({
-      name: this.state.eventName,
-      description: this.state.eventDescription,
+      name: values.eventName,
+      description: values.eventDescription,
       location: {
-        latitude: this.props.userLocation.coords.latitude,
-        longitude: this.props.userLocation.coords.longitude
-      }
+        latitude: values.userLocation.coords.latitude,
+        longitude: values.userLocation.coords.longitude
+      },
+      private: values.eventPrivate
     })
     .then(response => {
       this.props.insertPublicEvent(response);
@@ -74,7 +71,9 @@ class CreateEventScreen extends Component {
         serverError: false
       });
     })
-    .catch(() => {
+    .catch(error => {
+      console.log(error);
+
       this.setState({
         serverError: true
       });
@@ -117,7 +116,7 @@ class CreateEventScreen extends Component {
               <View>
                 <Button
                   title="Add Event"
-                  onPress={() => this.createEvent()}
+                  onPress={() => handleSubmit()}
                 />
               </View>
             </View>
