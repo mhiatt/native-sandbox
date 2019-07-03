@@ -9,7 +9,7 @@ const { Marker } = MapView;
 
 import eventService from '../services/eventService';
 
-import { getEventsSuccess } from '../reducers/eventReducer';
+import { getPublicEventsSuccess } from '../reducers/eventReducer';
 import { setUserLocation } from '../reducers/userReducer';
 
 class MapScreen extends Component {
@@ -32,13 +32,14 @@ class MapScreen extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.userLocation !== this.props.userLocation) {
       eventService
-        .getPublicEvents(
+        .getEvents(
           this.props.userLocation.coords.latitude,
           this.props.userLocation.coords.longitude,
-          1
+          1,
+          false
         )
         .then(events => {
-          this.props.getEventsSuccess(events);
+          this.props.getPublicEventsSuccess(events);
         });
     }
   }
@@ -93,7 +94,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  getEventsSuccess,
+  getPublicEventsSuccess,
   setUserLocation
 };
 

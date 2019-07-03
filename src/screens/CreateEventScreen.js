@@ -9,7 +9,7 @@ import FinalFormTextInput from '../components/FinalFormTextInput';
 import FinalFormSwitch from '../components/FinalFormSwitch';
 
 import eventService from '../services/eventService';
-import insertPublicEvent from '../reducers/eventReducer';
+import insertEvent from '../reducers/eventReducer';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,13 +59,13 @@ class CreateEventScreen extends Component {
       name: values.eventName,
       description: values.eventDescription,
       location: {
-        latitude: values.userLocation.coords.latitude,
-        longitude: values.userLocation.coords.longitude
+        latitude: this.props.userLocation.coords.latitude,
+        longitude: this.props.userLocation.coords.longitude
       },
       private: values.eventPrivate
     })
     .then(response => {
-      this.props.insertPublicEvent(response);
+      this.props.insertEvent(response);
 
       this.setState({
         serverError: false
@@ -134,7 +134,7 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = {
-  insertPublicEvent
+  insertEvent
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEventScreen);

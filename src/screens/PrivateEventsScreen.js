@@ -5,7 +5,24 @@ import { View, FlatList, Text, Button } from 'react-native';
 
 import PrivateEventListItem from '../components/PrivateEventListItem';
 
+import eventService from '../services/eventService';
+
 class PrivateEventsScreen extends Component {
+  componentDidMount(prevProps) {
+    if (prevProps.userLocation !== this.props.userLocation) {
+      eventService
+        .getEvents(
+          this.props.userLocation.coords.latitude,
+          this.props.userLocation.coords.longitude,
+          1,
+          true
+        )
+        .then(events => {
+          this.props.getPrivateEventsSuccess(events);
+        });
+    }
+  }
+
   requestPermission = (id) => {
     // TODO: add action to request permission
     // Then update status for event to pending
@@ -39,6 +56,7 @@ class PrivateEventsScreen extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     privateEvents: state.event.privateEvents,
+    userLocation: state.user.location,
     ...ownProps
   };
 };

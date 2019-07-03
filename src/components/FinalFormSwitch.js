@@ -5,8 +5,14 @@ import { Field } from 'react-final-form';
 
 const FinalFormSwitch = ({ name, labelText }) => {
   const styles = StyleSheet.create({
+    container: {
+      margin: 15
+    },
     label: {
       fontSize: 12
+    },
+    switch: {
+      alignSelf: 'flex-start'
     },
     error: {
       fontSize: 12,
@@ -18,9 +24,10 @@ const FinalFormSwitch = ({ name, labelText }) => {
     <Field
       name={name}
       render={({ input, meta }) => (
-        <View>
+        <View style={styles.container}>
           <Text style={styles.label}>{labelText}</Text>
           <Switch
+            style={styles.switch}
             value={input.value}
             onValueChange={input.onChange}
           />
