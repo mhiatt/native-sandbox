@@ -1,5 +1,5 @@
 const actionTypes = {
-  GET_EVENTS_SUCCESS: 'GET_EVENTS_SUCCESS',
+  GET_PUBLIC_EVENTS_SUCCESS: 'GET_PUBLIC_EVENTS_SUCCESS',
   INSERT_PUBLIC_EVENT: 'INSERT_PUBLIC_EVENT',
   GET_PRIVATE_EVENTS_SUCCESS: 'GET_PRIVATE_EVENTS_SUCCESS'
 };
@@ -13,6 +13,7 @@ const eventReducer = (state, action) => {
       };
     }
     case actionTypes.GET_PRIVATE_EVENTS_SUCCESS: {
+      console.log('PRIVATE EVENTS SUCCCESS');
       return {
         ...state,
         privateEvents: action.payload
@@ -41,7 +42,7 @@ export function getPublicEventsSuccess(events) {
 
 export function getPrivateEventsSuccess(events) {
   return {
-    type: action.GET_PRIVATE_EVENTS_SUCCESS,
+    type: actionTypes.GET_PRIVATE_EVENTS_SUCCESS,
     payload: events
   };
 }

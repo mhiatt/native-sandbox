@@ -2,7 +2,7 @@ import firebase from 'firebase';
 
 window = undefined;
 const eventService = {
-  async getEvents(latitude, longitude, distance, private) {
+  async getEvents(latitude, longitude, distance) {
     const lat = 0.0144927536231884;
     const long = 0.0181818181818182;
 
@@ -15,12 +15,12 @@ const eventService = {
     const lesserGeopoint = new firebase.firestore.GeoPoint(lowerLat, lowerLong);
     const greaterGeopoint = new firebase.firestore.GeoPoint(greaterLat, greaterLong);
 
-    const events = [];
+    const publicEvents = [];
+    const privateEvents = [];
 
     const querySnapshot = await firebase
       .firestore()
       .collection('events')
-      .where('private', '==', private)
       .where('location', '>', lesserGeopoint)
       .where('location', '<', greaterGeopoint)
       .get();
@@ -30,10 +30,14 @@ const eventService = {
       let event = eventSnapshot.data();
       event.id = eventSnapshot.id;
 
-      events.push(event);
+      if (event.private) {
+        privateEvents.push(event);
+      } else {
+        publicEvents.push(event);
+      }
     });
 
-    return events;
+    return { public: publicEvents, private: privateEvents };
   },
   async createEvent(eventData) {
     const event = {

@@ -8,19 +8,31 @@ import PrivateEventListItem from '../components/PrivateEventListItem';
 import eventService from '../services/eventService';
 
 class PrivateEventsScreen extends Component {
-  componentDidMount(prevProps) {
+  shouldGetPrivateEvents = (prevProps) => {
     if (prevProps.userLocation !== this.props.userLocation) {
-      eventService
-        .getEvents(
-          this.props.userLocation.coords.latitude,
-          this.props.userLocation.coords.longitude,
-          1,
-          true
-        )
-        .then(events => {
-          this.props.getPrivateEventsSuccess(events);
-        });
+      return true;
+    } else if (this.props.userLocation && this.props.userLocation.coords) {
+      return true;
     }
+
+    return false;
+  }
+
+  componentDidUpdate(prevProps) {
+    // if (this.shouldGetPrivateEvents(prevProps)) {
+    //   console.log();
+    //   eventService
+    //     .getEvents(
+    //       this.props.userLocation.coords.latitude,
+    //       this.props.userLocation.coords.longitude,
+    //       1,
+    //       true
+    //     )
+    //     .then(events => {
+    //       console.log(events);
+    //       this.props.getPrivateEventsSuccess(events);
+    //     });
+    // }
   }
 
   requestPermission = (id) => {
@@ -31,7 +43,7 @@ class PrivateEventsScreen extends Component {
     console.log(id);
   }
 
-  renderItem = ({ item }) => {
+  renderItem = ({ item }) => (
     <PrivateEventListItem
       id={item.id}
       name={item.name}
@@ -39,14 +51,15 @@ class PrivateEventsScreen extends Component {
       location={item.location}
       onPressRequestPermission={this.requestPermission}
     />
-  }
+  )
 
   render() {
+    console.log(this);
     return (
       <View>
         <FlatList
           data={this.props.privateEvents}
-          render={this.renderItem}
+          renderItem={this.renderItem}
         />
       </View>
     );
