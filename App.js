@@ -10,7 +10,7 @@ import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 
 import store from './src/store';
 // import mainReducer from './reducers/mainReducer';
 // import initState from './initState.json';
-import { setUserLocation } from './src/reducers/userReducer';
+import { getUserLocationSuccess } from './src/reducers/userReducer';
 import AppNavigator from './src/navigation/AppNavigator';
 
 const styles = StyleSheet.create({
@@ -42,13 +42,13 @@ class App extends React.Component {
   }
 
   componentWillMount() {
-    if (Platform.OS === 'android' && !Constants.isDevice) {
-      this.setState({
-        errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
-      });
-    } else {
-      this._getLocationAsync();
-    }
+    // if (Platform.OS === 'android' && !Constants.isDevice) {
+    //   this.setState({
+    //     errorMessage: 'Oops, this will not work on Sketch in an Android emulator. Try it on your device!',
+    //   });
+    // } else {
+    //   this._getLocationAsync();
+    // }
   }
 
   render() {
@@ -82,7 +82,7 @@ class App extends React.Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    store.dispatch(setUserLocation(location));
+    store.dispatch(getUserLocationSuccess(location));
     this.setState({ location });
     console.log(location);
   };

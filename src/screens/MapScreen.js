@@ -10,7 +10,7 @@ const { Marker } = MapView;
 import eventService from '../services/eventService';
 
 import { getPublicEventsSuccess, getPrivateEventsSuccess } from '../reducers/eventReducer';
-import { setUserLocation } from '../reducers/userReducer';
+import { getUserLocationSuccess } from '../reducers/userReducer';
 
 class MapScreen extends Component {
   constructor(props) {
@@ -22,11 +22,11 @@ class MapScreen extends Component {
 
     let location = await Location.getCurrentPositionAsync({});
     console.log(location);
-    this.props.setUserLocation(location);
+    this.props.getUserLocationSuccess(location);
   }
 
   componentWillMount() {
-    this.getUserLocation();
+    // this.getUserLocation();
   }
 
   componentDidUpdate(prevProps) {
@@ -96,7 +96,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   getPublicEventsSuccess,
   getPrivateEventsSuccess,
-  setUserLocation
+  getUserLocationSuccess
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MapScreen);

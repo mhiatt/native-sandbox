@@ -1,17 +1,17 @@
 const actionTypes = {
-  GET_USER: 'GET_USER',
-  SET_USER_LOCATION: 'SET_USER_LOCATION'
+  GET_USER_SUCCESS: 'GET_USER_SUCCESS',
+  GET_USER_LOCATION_SUCCESS: 'GET_USER_LOCATION_SUCCESS'
 };
 
 const userReducer = (state, action) => {
   switch (action.type) {
-    case actionTypes.GET_USER: {
+    case actionTypes.GET_USER_SUCCESS: {
       return {
         ...state,
-        lastName: 'Adams'
+        ...action.payload
       };
     }
-    case actionTypes.SET_USER_LOCATION: {
+    case actionTypes.GET_USER_LOCATION_SUCCESS: {
       return {
         ...state,
         location: action.payload
@@ -23,11 +23,17 @@ const userReducer = (state, action) => {
   }
 };
 
-export function setUserLocation(locationData) {
+export function getUserLocationSuccess(locationData) {
   console.log('seUserLocation');
   return {
-    type: actionTypes.SET_USER_LOCATION,
+    type: actionTypes.GET_USER_LOCATION_SUCCESS,
     payload: locationData
+  };
+}
+
+export function getUserSuccess() {
+  return {
+    type: actionTypes.GET_USER_SUCCESS
   };
 }
 
