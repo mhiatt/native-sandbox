@@ -31,9 +31,12 @@ export function getUserLocationSuccess(locationData) {
   };
 }
 
-export function getUserSuccess() {
+export function getUserSuccess(userUid) {
   return {
-    type: actionTypes.GET_USER_SUCCESS
+    type: actionTypes.GET_USER_SUCCESS,
+    payload: {
+      uid: userUid
+    }
   };
 }
 

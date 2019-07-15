@@ -40,7 +40,8 @@ class PrivateEventsScreen extends Component {
     // Then update status for event to pending
     // Listen on event for status update (firebase subscribe)
     // THen update status for event / maybe have gloabl toast notification / push notification if not in app
-    console.log(id);
+    console.log(id, this.props.user.uid);
+    eventService.requestEventPermission(this.props.user.uid, id);
   }
 
   renderItem = ({ item }) => (
@@ -69,7 +70,7 @@ class PrivateEventsScreen extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     privateEvents: state.event.privateEvents,
-    userLocation: state.user.location,
+    user: state.user,
     ...ownProps
   };
 };

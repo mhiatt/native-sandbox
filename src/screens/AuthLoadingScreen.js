@@ -13,7 +13,7 @@ import { Permissions, Constants, Location } from 'expo';
 
 import eventService from '../services/eventService';
 
-import { getUserLocationSuccess } from '../reducers/userReducer';
+import { getUserLocationSuccess, getUserSuccess } from '../reducers/userReducer';
 import { getPublicEventsSuccess, getPrivateEventsSuccess } from '../reducers/eventReducer';
 
 // for testing loading screen
@@ -34,16 +34,21 @@ const styles = StyleSheet.create({
 });
 
 class AuthLoadingScreen extends Component {
+  mounted = false;
+
   constructor(props) {
     super(props);
-    try {
-      this._bootstrapAsync();
-    } catch(error) {
-      console.log('AuthLoadingScreen _bootstrapAsync():', error);
+  }
 
-      // TODO: Navigate to a fail screen
-    }
+  componentDidMount() {
+    this.mounted = true;
 
+    this._bootstrapAsync()
+      .catch(() => this.props.navigation.navigate('Error'));
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
   }
 
   _bootstrapAsync = async () => {
@@ -55,7 +60,7 @@ class AuthLoadingScreen extends Component {
 
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
 
-    if (status !== 'granted') {
+    if (status !== 'granted' && this.mounted) {
       this.setState({
         errorMessage: 'Permission to access location was denied',
       });
@@ -65,23 +70,29 @@ class AuthLoadingScreen extends Component {
 
     this.props.getUserLocationSuccess(location);
 
-    const events = await eventService.getEvents(
-      location.coords.latitude,
-      location.coords.longitude,
-      1
-    );
-
-    this.props.getPublicEventsSuccess(events.public);
-    this.props.getPrivateEventsSuccess(events.private);
-
     // use for testing loading screen render await wait(20000);
 
     // const currentUser = authService.getCurrentUser();
     // console.log('AuthLoadingScreen line: 23', currentUser);
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    firebase.auth().onAuthStateChanged(user => {
-      this.props.navigation.navigate(user ? 'App' : 'Auth');
+    firebase.auth().onAuthStateChanged(async user => {
+      if (user) {
+        this.props.getUserSuccess(user.uid);
+
+        const events = await eventService.getEvents(
+          location.coords.latitude,
+          location.coords.longitude,
+          1
+        );
+
+        this.props.getPublicEventsSuccess(events.public);
+        this.props.getPrivateEventsSuccess(events.private);
+
+        this.props.navigation.navigate('App');
+      } else {
+        this.props.navigation.navigate('Auth');
+      }
     });
   }
 
@@ -103,7 +114,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = {
   getPublicEventsSuccess,
   getPrivateEventsSuccess,
-  getUserLocationSuccess
+  getUserLocationSuccess,
+  getUserSuccess
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen);

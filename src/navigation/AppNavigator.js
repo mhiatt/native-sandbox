@@ -7,7 +7,7 @@ import CreateEventScreen from '../screens/CreateEventScreen';
 import PrivateEventsScreen from '../screens/PrivateEventsScreen';
 import AuthLoadingScreen from '../screens/AuthLoadingScreen';
 import SignInScreen from '../screens/SignInScreen';
-
+import ErrorScreen from '../screens/ErrorScreen';
 import MainTabNavigator from './MainTabNavigator';
 
 const AppStack = createStackNavigator({
@@ -22,12 +22,14 @@ const AppStack = createStackNavigator({
   }
 }); // MainTabNavigator; // createStackNavigator({ Home: HomeScreen });
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
+const ErrorStack = createStackNavigator({ Error: ErrorScreen });
 
 export default createAppContainer(createSwitchNavigator(
   {
     AuthLoading: AuthLoadingScreen,
     App: AppStack,
     Auth: AuthStack,
+    Error: ErrorStack
   },
   {
     initialRouteName: 'AuthLoading',

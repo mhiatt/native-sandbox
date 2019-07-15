@@ -58,6 +58,20 @@ const eventService = {
     event.id = docRef.id;
 
     return event;
+  },
+  async requestEventPermission(userId, eventId) {
+    const updateObj = {};
+
+    updateObj[`attendees.${userId}`] = 0;
+
+    updateObj
+    const docRef = await firebase
+      .firestore()
+      .collection('events')
+      .doc(eventId)
+      .update(updateObj);
+
+    console.log('eventService.js 74:', docRef);
   }
 };
 

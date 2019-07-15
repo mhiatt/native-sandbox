@@ -45,13 +45,14 @@ class MapScreen extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <View style={{ flex: 1 }}>
         <MapView
           style={{ flex: 1 }}
           initialRegion={{
-            latitude: this.props.userLocation.coords && this.props.userLocation.coords.latitude, // TODO: have lodaing stat that does not mount this code until the users location is found
-            longitude: this.props.userLocation.coords && this.props.userLocation.coords.longitude, //
+            latitude: this.props.user.location.coords && this.props.user.location.coords.latitude, // TODO: have lodaing stat that does not mount this code until the users location is found
+            longitude: this.props.user.location.coords && this.props.user.location.coords.longitude, //
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
             showsUserLocation: true
@@ -73,6 +74,25 @@ class MapScreen extends Component {
               );
             })
           }
+          {
+            this.props.privateEvents.map((event, index) => {
+              console.log(event.attendees[this.props.user.uid]);
+              if (event.attendees[this.props.user.uid] === 0) {
+                console.log('I HAVE PERMISSION');
+                return (
+                  <Marker
+                    key={index}
+                    coordinate={{
+                      latitude: event.location._lat,
+                      longitude: event.location._long
+                    }}
+                    title={event.name}
+                    description={event.description}
+                  />
+                );
+              }
+            })
+          }
         </MapView>
         <View>
           <Button
@@ -88,7 +108,8 @@ class MapScreen extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     publicEvents: state.event.publicEvents,
-    userLocation: state.user.location,
+    privateEvents: state.event.privateEvents,
+    user: state.user,
     ...ownProps
   };
 };
