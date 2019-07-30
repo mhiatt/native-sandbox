@@ -12,6 +12,10 @@ import eventService from '../services/eventService';
 import { getPublicEventsSuccess, getPrivateEventsSuccess } from '../reducers/eventReducer';
 import { getUserLocationSuccess } from '../reducers/userReducer';
 
+import * as firebase from "firebase/app"
+import 'firebase/firestore'
+import 'firebase/functions'
+
 class MapScreen extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +27,17 @@ class MapScreen extends Component {
     let location = await Location.getCurrentPositionAsync({});
     console.log(location);
     this.props.getUserLocationSuccess(location);
+
+    var useLocale = firebase.functions().httpsCallable('useLocale');
+
+    useLocale({
+      corx: 'x',
+      cory: 'y'
+    }).then(function(ret) {
+      console.log(ret.corz);
+    }).catch(function(err) {
+      console.log(err);
+    })
   }
 
   componentWillMount() {
