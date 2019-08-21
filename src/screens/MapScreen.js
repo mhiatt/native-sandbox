@@ -2,10 +2,8 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Button, View } from 'react-native';
-import { MapView, Permissions, Location } from 'expo';
-
-const { Marker } = MapView;
-
+import { Permissions, Location } from 'expo';
+import MapView, { Marker } from 'react-native-maps';
 
 import eventService from '../services/eventService';
 
@@ -60,7 +58,6 @@ class MapScreen extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -75,7 +72,7 @@ class MapScreen extends Component {
         >
           {
             this.props.publicEvents.map((event, index) => {
-              console.log(event);
+              console.log('Public Event Marker', event);
               return (
                 <Marker
                   key={index}
@@ -93,7 +90,7 @@ class MapScreen extends Component {
             this.props.privateEvents.map((event, index) => {
               console.log(event.attendees[this.props.user.uid]);
               if (event.attendees[this.props.user.uid] === 0) {
-                console.log('I HAVE PERMISSION');
+                console.log('I HAVE PERMISSION', event.location);
                 return (
                   <Marker
                     key={index}

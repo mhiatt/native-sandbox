@@ -9,7 +9,8 @@ import {
   View
 } from 'react-native';
 
-import { Permissions, Constants, Location } from 'expo';
+import { Permissions, Location } from 'expo';
+import Constants from 'expo-constants';
 
 import eventService from '../services/eventService';
 

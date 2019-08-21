@@ -13,7 +13,7 @@ const eventReducer = (state, action) => {
       };
     }
     case actionTypes.GET_PRIVATE_EVENTS_SUCCESS: {
-      console.log('PRIVATE EVENTS SUCCCESS');
+      console.log('PRIVATE EVENTS SUCCCESS', action.payload);
       return {
         ...state,
         privateEvents: action.payload

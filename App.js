@@ -5,7 +5,10 @@ import firebase from 'firebase';
 import 'firebase/firestore';
 
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon, Permissions, Location, Constants } from 'expo';
+import { AppLoading, Permissions, Location } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
+import { Ionicons } from '@expo/vector-icons';
 
 import store from './src/store';
 // import mainReducer from './reducers/mainReducer';
@@ -95,7 +98,7 @@ class App extends React.Component {
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
-        ...Icon.Ionicons.font,
+        ...Ionicons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./src/assets/fonts/SpaceMono-Regular.ttf'),

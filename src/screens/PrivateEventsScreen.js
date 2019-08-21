@@ -44,15 +44,18 @@ class PrivateEventsScreen extends Component {
     eventService.requestEventPermission(this.props.user.uid, id);
   }
 
-  renderItem = ({ item }) => (
-    <PrivateEventListItem
-      id={item.id}
-      name={item.name}
-      description={item.description}
-      location={item.location}
-      onPressRequestPermission={this.requestPermission}
-    />
-  )
+  renderItem = ({ item }) => {
+    console.log(item);
+    return (
+      <PrivateEventListItem
+        id={item.id}
+        name={item.name}
+        description={item.description}
+        location={item.location}
+        onPressRequestPermission={this.requestPermission}
+      />
+    );
+  }
 
   render() {
     console.log(this);

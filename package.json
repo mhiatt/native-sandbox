@@ -13,12 +13,17 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "@expo/vector-icons": "^9.0.0",
     "expo": "^33.0.0",
+    "expo-asset": "^6.0.0",
+    "expo-constants": "^5.0.1",
+    "expo-font": "^5.0.1",
     "final-form": "^4.16.1",
     "firebase": "^6.1.1",
     "react": "16.8.3",
     "react-final-form": "^6.3.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native-maps": "^0.24.2",
     "react-navigation": "^3.11.0",
     "react-redux": "^7.1.0",
     "redux": "^4.0.1"
